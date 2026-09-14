@@ -6,15 +6,10 @@ import { spawnSync } from 'node:child_process';
 const root = path.resolve(import.meta.dirname, '..');
 const sector = 2352;
 
-function crc32(buf) {
-  const table = crc32.table ??= Array.from({ length: 256 }, (_, n) => {
-    let c = n;
-    for (let k = 0; k < 8; k++) c = (c & 1) ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
-    return c >>> 0;
-  });
-  let crc = 0xffffffff;
-  for (const byte of buf) crc = table[(crc ^ byte) & 0xff] ^ (crc >>> 8);
-  return (crc ^ 0xffffffff) >>> 0;
+function fnv1a32(buf) {
+  let hash = 0x811c9dc5;
+  for (const byte of buf) hash = Math.imul(hash ^ byte, 0x01000193) >>> 0;
+  return hash;
 }
 
 function flac(raw, output) {
@@ -34,8 +29,8 @@ function writeGame({ dir, bin, cue, cuts, title }) {
   const dataEnd = cuts[0] * sector;
   const data = disc.subarray(0, dataEnd);
   const gz = zlib.gzipSync(data, { level: 9, mtime: 0 });
-  fs.writeFileSync(path.join(out, 'game-data.bin.gz'), gz);
-  const lines = [`data game-data.bin.gz ${gz.length} ${data.length} ${crc32(data)}`];
+  fs.writeFileSync(path.join(out, 'demo-data.bin.gz'), gz);
+  const lines = [`data demo-data.bin.gz ${gz.length} ${data.length} ${fnv1a32(data)}`];
   for (let i = 0; i < cuts.length; i++) {
     const start = cuts[i] * sector;
     const end = (cuts[i + 1] ?? disc.length / sector) * sector;
@@ -43,7 +38,7 @@ function writeGame({ dir, bin, cue, cuts, title }) {
     const name = `track-${String(i + 2).padStart(2, '0')}.flac`;
     const output = path.join(out, name);
     flac(audio, output);
-    lines.push(`track ${i + 2} ${name} ${fs.statSync(output).size} ${audio.length} ${crc32(audio)} ${title[i] ?? ''}`.trim());
+    lines.push(`track ${i + 2} ${name} ${fs.statSync(output).size} ${audio.length} ${fnv1a32(audio)} ${title[i] ?? ''}`.trim());
   }
   fs.copyFileSync(cue, path.join(out, 'demo-disc.cue'));
   fs.writeFileSync(path.join(out, 'web-manifest.txt'), `${lines.join('\n')}\n`);
@@ -75,4 +70,3 @@ writeGame({
   cuts: [1577, 7182],
   title: ['CORTEX IGNITION COMBAT', 'CORTEX IGNITION MENU'],
 });
-
