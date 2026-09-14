@@ -61,10 +61,10 @@ const pregapStart = voxideSectors;
 const index1 = pregapStart + 150;
 const msf = n => `${String(Math.floor(n / 4500)).padStart(2, '0')}:${String(Math.floor((n % 4500) / 75)).padStart(2, '0')}:${String(n % 75).padStart(2, '0')}`;
 fs.writeFileSync(voxideDeliveryCue, `FILE "voxide-delivery.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n  TRACK 02 AUDIO\n    INDEX 00 ${msf(pregapStart)}\n    INDEX 01 ${msf(index1)}\n`);
-writeGame({ dir: 'voxide', bin: voxideDelivery, cue: voxideDeliveryCue, cuts: [voxideSectors], title: ['SILENCE'] });
+writeGame({ dir: 'voxide-v0.1.11', bin: voxideDelivery, cue: voxideDeliveryCue, cuts: [voxideSectors], title: ['SILENCE'] });
 
 writeGame({
-  dir: 'cortex-ignition',
+  dir: 'cortex-ignition-2026.09.05',
   bin: path.join(cortexRoot, 'Cortex Ignition Tech Demo.bin'),
   cue: path.join(cortexRoot, 'Cortex Ignition Tech Demo.cue'),
   cuts: [1577, 7182],
