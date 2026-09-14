@@ -75,7 +75,12 @@ function __wbg_get_imports() {
             return isLikeNone(ret) ? 0 : addToExternrefTable0(ret);
         },
         __wbg_addEventListener_767c2a31836a5d6b: function() { return handleError(function (arg0, arg1, arg2, arg3) {
-            arg0.addEventListener(getStringFromWasm0(arg1, arg2), arg3);
+            const eventName = getStringFromWasm0(arg1, arg2);
+            arg0.addEventListener(eventName, arg3);
+            if (eventName === 'keydown' || eventName === 'keyup') {
+                const hooks = globalThis.__psoxideKeyboardHooks ??= { keydown: [], keyup: [] };
+                hooks[eventName].push(arg3);
+            }
         }, arguments); },
         __wbg_addListener_532195f4690552cf: function() { return handleError(function (arg0, arg1) {
             arg0.addListener(arg1);

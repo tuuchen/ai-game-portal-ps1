@@ -5,9 +5,15 @@ const loader = document.querySelector('.loader');
 let runtimeReady = false;
 
 function key(key, code) {
+  const eventInit = { key, code, bubbles: true, composed: true };
+  const hooks = window.__psoxideKeyboardHooks;
+  if (hooks) {
+    for (const type of ['keydown', 'keyup']) for (const callback of hooks[type]) callback(new KeyboardEvent(type, eventInit));
+    return;
+  }
   const targets = [document.querySelector('canvas'), document, window].filter(Boolean);
   for (const type of ['keydown', 'keyup']) {
-    for (const target of targets) target.dispatchEvent(new KeyboardEvent(type, { key, code, bubbles: true, composed: true }));
+    for (const target of targets) target.dispatchEvent(new KeyboardEvent(type, eventInit));
   }
 }
 
