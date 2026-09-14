@@ -5,7 +5,10 @@ const loader = document.querySelector('.loader');
 let runtimeReady = false;
 
 function key(key, code) {
-  for (const type of ['keydown', 'keyup']) window.dispatchEvent(new KeyboardEvent(type, { key, code, bubbles: true }));
+  const targets = [document.querySelector('canvas'), document, window].filter(Boolean);
+  for (const type of ['keydown', 'keyup']) {
+    for (const target of targets) target.dispatchEvent(new KeyboardEvent(type, { key, code, bubbles: true, composed: true }));
+  }
 }
 
 window.addEventListener('TrunkApplicationStarted', () => {
@@ -28,4 +31,3 @@ button.addEventListener('click', async () => {
 window.addEventListener('error', () => {
   document.querySelector('.status').textContent = 'Could not start — reload to retry';
 });
-
