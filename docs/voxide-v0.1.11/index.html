@@ -2,16 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>VoXide — PlayStation homebrew</title><link rel="stylesheet" href="../player.css">
+  <title>VoXide — PlayStation homebrew</title><link rel="stylesheet" href="../player.css?v=2">
   <script>
     window.PS1_GAME={shortTitle:'VoXide'};
     (()=>{const O=window.AudioContext||window.webkitAudioContext;if(!O)return;const a=[];function A(o){const c=new O(o);a.push(c);return c}A.prototype=O.prototype;window.AudioContext=window.webkitAudioContext=A;for(const e of['pointerdown','keydown','touchstart'])addEventListener(e,()=>a.forEach(c=>c.state==='suspended'&&c.resume()),true)})();
   </script>
-  <script type="module">import init,* as bindings from '../runtime/frontend.js';const wasm=await init({module_or_path:'../runtime/frontend_bg.wasm'});window.wasmBindings=bindings;dispatchEvent(new CustomEvent('TrunkApplicationStarted',{detail:{wasm}}));</script>
+  <script type="module">import init,* as bindings from '../runtime/frontend.js?v=2';const wasm=await init({module_or_path:'../runtime/frontend_bg.wasm?v=2'});window.wasmBindings=bindings;dispatchEvent(new CustomEvent('TrunkApplicationStarted',{detail:{wasm}}));</script>
 </head>
 <body>
   <div class="loader"><div><div class="mark">PSo<span>X</span>ide</div><div class="track"></div><div class="status">Loading shared emulator</div></div></div>
   <div class="gate"><div class="card"><div class="eyebrow">Actual PlayStation 1 homebrew</div><h1>VoXide</h1><p>Mine, craft and survive in a fully 3D voxel sandbox built for the original PlayStation.</p><button disabled>Loading emulator…</button><div class="hint">Gamepad recommended · keyboard mapping available in the emulator toolbar</div></div></div>
-  <script src="../player.js"></script><noscript>JavaScript is required.</noscript>
+  <script src="../player.js?v=2"></script><noscript>JavaScript is required.</noscript>
 </body></html>
-
